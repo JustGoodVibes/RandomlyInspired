@@ -17,10 +17,9 @@ import { getActivityById } from '../data/activities';
 import { useAppContext } from '../context/AppContext';
 import AccessibleButton from './AccessibleButton';
 import SkipNavigation from './SkipNavigation';
+import PageWrapper from './PageWrapper';
 import {
   useAnimationConfig,
-  pageVariants,
-  pageTransition,
   containerVariants,
   itemVariants
 } from '../utils/animations';
@@ -96,13 +95,8 @@ const TutorialPage = () => {
   return (
     <>
       <SkipNavigation />
-      <motion.div
-        className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500"
-        variants={pageVariants}
-        initial="initial"
-        animate="in"
-        exit="out"
-        transition={pageTransition(shouldReduceMotion)}
+      <PageWrapper
+        className="bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500"
       >
         {/* Header */}
         <header className="bg-white/10 backdrop-blur-sm border-b border-white/20">
@@ -343,7 +337,7 @@ const TutorialPage = () => {
             </div>
           </motion.div>
         </main>
-      </motion.div>
+      </PageWrapper>
     </>
   );
 };

@@ -15,10 +15,9 @@ import { useAppContext } from '../context/AppContext';
 import AccessibleButton from './AccessibleButton';
 import LoadingSpinner from './LoadingSpinner';
 import SkipNavigation from './SkipNavigation';
+import PageWrapper from './PageWrapper';
 import {
   useAnimationConfig,
-  pageVariants,
-  pageTransition,
   cardVariants,
   fadeVariants
 } from '../utils/animations';
@@ -116,15 +115,10 @@ const SuggestionPage = () => {
   return (
     <>
       <SkipNavigation />
-      <motion.div
-        className="min-h-screen bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 p-4"
+      <PageWrapper
+        className="bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 p-4"
         role="main"
         id="main-content"
-        variants={pageVariants}
-        initial="initial"
-        animate="in"
-        exit="out"
-        transition={pageTransition(shouldReduceMotion)}
       >
         {/* Header */}
         <header className="max-w-4xl mx-auto pt-6 pb-4">
@@ -283,7 +277,7 @@ const SuggestionPage = () => {
             </motion.aside>
           )}
         </main>
-      </motion.div>
+      </PageWrapper>
     </>
   );
 };

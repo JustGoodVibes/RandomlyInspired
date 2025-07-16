@@ -17,45 +17,45 @@ export const useAnimationConfig = () => {
   };
 };
 
-// Page transition animations
+// Page transition animations - optimized to prevent flickering
 export const pageVariants = {
   initial: {
     opacity: 0,
-    y: 20,
+    scale: 0.98,
   },
   in: {
     opacity: 1,
-    y: 0,
+    scale: 1,
   },
   out: {
     opacity: 0,
-    y: -20,
+    scale: 1.02,
   },
 };
 
 export const pageTransition = (shouldReduceMotion = false) => ({
   type: "tween",
-  ease: "easeInOut",
-  duration: shouldReduceMotion ? 0.2 : 0.5,
+  ease: [0.25, 0.46, 0.45, 0.94], // Custom easing for smoother transitions
+  duration: shouldReduceMotion ? 0.15 : 0.4,
 });
 
-// Container animations with stagger
+// Container animations with stagger - optimized for page transitions
 export const containerVariants = (shouldReduceMotion = false) => ({
-  hidden: { 
+  hidden: {
     opacity: 0,
   },
   visible: {
     opacity: 1,
     transition: {
-      duration: shouldReduceMotion ? 0.2 : 0.6,
-      staggerChildren: shouldReduceMotion ? 0.05 : 0.1,
-      delayChildren: shouldReduceMotion ? 0 : 0.1,
+      duration: shouldReduceMotion ? 0.1 : 0.3,
+      staggerChildren: shouldReduceMotion ? 0.02 : 0.05,
+      delayChildren: shouldReduceMotion ? 0 : 0.2, // Delay to let page transition complete
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: shouldReduceMotion ? 0.1 : 0.3,
+      duration: shouldReduceMotion ? 0.05 : 0.15,
     },
   },
 });

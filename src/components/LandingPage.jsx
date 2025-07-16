@@ -4,10 +4,9 @@ import { Sparkles, ArrowRight, Target, Heart, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AccessibleButton from './AccessibleButton';
 import SkipNavigation from './SkipNavigation';
+import PageWrapper from './PageWrapper';
 import {
   useAnimationConfig,
-  pageVariants,
-  pageTransition,
   containerVariants,
   itemVariants,
   floatingVariants
@@ -24,15 +23,10 @@ const LandingPage = () => {
   return (
     <>
       <SkipNavigation />
-      <motion.div
-        className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-4"
+      <PageWrapper
+        className="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-4"
         role="main"
         id="main-content"
-        variants={pageVariants}
-        initial="initial"
-        animate="in"
-        exit="out"
-        transition={pageTransition(shouldReduceMotion)}
       >
         <motion.div
           className="max-w-4xl mx-auto text-center text-white"
@@ -127,7 +121,7 @@ const LandingPage = () => {
           </div>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </PageWrapper>
     </>
   );
 };

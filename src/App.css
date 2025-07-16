@@ -1,6 +1,35 @@
 .App {
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+  /* Prevent layout shifts during page transitions */
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Prevent flash of unstyled content */
+.App > div {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Page transition optimization */
+[data-page-wrapper] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 100vh;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Prevent content jumping during animations */
+.page-content {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* Respect user's reduced motion preference */
@@ -12,6 +41,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  [data-page-wrapper] {
+    will-change: auto;
   }
 }
 
