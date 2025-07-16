@@ -4,10 +4,26 @@ import { useAnimationConfig, pageVariants, pageTransition } from '../utils/anima
 
 /**
  * PageWrapper component provides consistent page transition animations
- * Simplified to eliminate layout conflicts and white flashes
+ * Optimized for Safari compatibility and cross-browser performance
  */
 const PageWrapper = ({ children, className = "", ...props }) => {
   const { shouldReduceMotion } = useAnimationConfig();
+
+  // Safari-specific optimizations
+  const safariOptimizedStyle = {
+    // Ensure immediate background rendering
+    willChange: 'opacity',
+    WebkitBackfaceVisibility: 'hidden',
+    backfaceVisibility: 'hidden',
+    // Safari-specific hardware acceleration
+    WebkitTransform: 'translateZ(0)',
+    transform: 'translateZ(0)',
+    WebkitPerspective: 1000,
+    perspective: 1000,
+    // Prevent Safari gradient flickering
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
+  };
 
   return (
     <motion.div
@@ -17,11 +33,7 @@ const PageWrapper = ({ children, className = "", ...props }) => {
       animate="in"
       exit="out"
       transition={pageTransition(shouldReduceMotion)}
-      style={{
-        // Ensure immediate background rendering
-        willChange: 'opacity, transform',
-        backfaceVisibility: 'hidden',
-      }}
+      style={safariOptimizedStyle}
       {...props}
     >
       {children}

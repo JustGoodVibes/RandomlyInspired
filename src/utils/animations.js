@@ -1,16 +1,28 @@
 import { useReducedMotion } from 'framer-motion';
 
+// Browser detection utility
+export const getBrowserInfo = () => {
+  const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
+  const isChrome = /chrome/i.test(userAgent) && !/edge/i.test(userAgent);
+  const isFirefox = /firefox/i.test(userAgent);
+
+  return { isSafari, isChrome, isFirefox };
+};
+
 // Shared animation configurations for consistent behavior across components
 export const useAnimationConfig = () => {
   const shouldReduceMotion = useReducedMotion();
-  
-  // Base durations - reduced for users who prefer reduced motion
-  const baseDuration = shouldReduceMotion ? 0.2 : 0.6;
-  const fastDuration = shouldReduceMotion ? 0.1 : 0.3;
-  const slowDuration = shouldReduceMotion ? 0.3 : 1.0;
-  
+  const { isSafari } = getBrowserInfo();
+
+  // Base durations - adjusted for Safari and reduced motion
+  const baseDuration = shouldReduceMotion ? 0.2 : (isSafari ? 0.7 : 0.6);
+  const fastDuration = shouldReduceMotion ? 0.1 : (isSafari ? 0.4 : 0.3);
+  const slowDuration = shouldReduceMotion ? 0.3 : (isSafari ? 1.2 : 1.0);
+
   return {
     shouldReduceMotion,
+    isSafari,
     baseDuration,
     fastDuration,
     slowDuration,
@@ -30,32 +42,40 @@ export const pageVariants = {
   },
 };
 
-export const pageTransition = (shouldReduceMotion = false) => ({
-  type: "tween",
-  ease: "easeInOut",
-  duration: shouldReduceMotion ? 0.1 : 0.3,
-});
+export const pageTransition = (shouldReduceMotion = false) => {
+  const { isSafari } = getBrowserInfo();
 
-// Container animations with stagger - ultra-smooth, no conflicts
-export const containerVariants = (shouldReduceMotion = false) => ({
-  hidden: {
-    opacity: 1, // Start visible to prevent flash
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: shouldReduceMotion ? 0.1 : 0.2,
-      staggerChildren: shouldReduceMotion ? 0.01 : 0.03,
-      delayChildren: shouldReduceMotion ? 0 : 0.1,
+  return {
+    type: "tween",
+    ease: isSafari ? [0.25, 0.1, 0.25, 1] : "easeInOut", // Safari-optimized easing
+    duration: shouldReduceMotion ? 0.1 : (isSafari ? 0.4 : 0.3), // Slightly longer for Safari
+  };
+};
+
+// Container animations with stagger - Safari-optimized
+export const containerVariants = (shouldReduceMotion = false) => {
+  const { isSafari } = getBrowserInfo();
+
+  return {
+    hidden: {
+      opacity: 1, // Start visible to prevent flash
     },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: shouldReduceMotion ? 0.05 : 0.1,
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : (isSafari ? 0.25 : 0.2),
+        staggerChildren: shouldReduceMotion ? 0.01 : (isSafari ? 0.04 : 0.03),
+        delayChildren: shouldReduceMotion ? 0 : (isSafari ? 0.15 : 0.1),
+      },
     },
-  },
-});
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.05 : (isSafari ? 0.15 : 0.1),
+      },
+    },
+  };
+};
 
 // Item animations for staggered children - minimal movement
 export const itemVariants = (shouldReduceMotion = false) => ({

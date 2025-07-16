@@ -14,32 +14,85 @@
   position: relative;
 }
 
-/* Ensure gradient backgrounds render immediately */
+/* Ensure gradient backgrounds render immediately - Safari optimized */
 .bg-gradient-to-br {
   background-attachment: local;
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  /* Safari-specific gradient optimizations */
+  -webkit-background-size: 100% 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Force hardware acceleration in Safari */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Prevent Safari gradient flickering */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 
-/* Page transition optimization - fixed positioning issues */
+/* Page transition optimization - Safari-compatible */
 [data-page-wrapper] {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  /* Safari-optimized hardware acceleration */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
   /* Ensure background renders immediately */
   background-color: transparent;
+  /* Safari-compatible isolation */
+  -webkit-isolation: isolate;
   isolation: isolate;
 }
 
-/* Prevent content jumping during animations */
+/* Prevent content jumping during animations - Safari optimized */
 .page-content {
-  transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  /* Ensure smooth rendering */
-  contain: layout style paint;
+  transform: translateZ(0);
+  /* Safari-compatible containment (fallback for unsupported) */
+  contain: layout style;
+  /* Additional Safari optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Safari-specific animation optimizations */
+@supports (-webkit-appearance: none) {
+  /* Safari-only styles */
+  [data-page-wrapper] {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-will-change: opacity;
+    will-change: opacity;
+  }
+
+  .bg-gradient-to-br {
+    /* Force Safari to use GPU for gradients */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    /* Prevent Safari gradient repainting */
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    /* Additional Safari gradient optimizations */
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    /* Force compositing layer for smooth gradients */
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+
+  /* Safari-specific motion optimization */
+  .motion-div {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 }
 
 /* Respect user's reduced motion preference */
@@ -54,6 +107,7 @@
   }
 
   [data-page-wrapper] {
+    -webkit-will-change: auto;
     will-change: auto;
   }
 }
