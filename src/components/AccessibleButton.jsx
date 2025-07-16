@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAnimationConfig, buttonVariants } from '../utils/animations';
 
-const AccessibleButton = ({ 
-  children, 
-  onClick, 
-  className = '', 
+const AccessibleButton = ({
+  children,
+  onClick,
+  className = '',
   variant = 'primary',
   disabled = false,
   ariaLabel,
-  ...props 
+  ...props
 }) => {
-  const baseClasses = 'font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed';
+  const { shouldReduceMotion } = useAnimationConfig();
+  const baseClasses = 'font-semibold rounded-lg focus:outline-none focus:ring-4 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
     primary: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 focus:ring-purple-300',
@@ -36,8 +38,9 @@ const AccessibleButton = ({
       onKeyDown={handleKeyDown}
       disabled={disabled}
       aria-label={ariaLabel}
-      whileHover={disabled ? {} : { scale: 1.05 }}
-      whileTap={disabled ? {} : { scale: 0.95 }}
+      variants={buttonVariants(shouldReduceMotion)}
+      whileHover={disabled ? {} : "hover"}
+      whileTap={disabled ? {} : "tap"}
       {...props}
     >
       {children}

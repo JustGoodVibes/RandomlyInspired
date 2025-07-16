@@ -3,6 +3,18 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Custom gradient backgrounds */
 .gradient-bg-1 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -23,18 +35,18 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Custom button styles */
+/* Custom button styles - removed conflicting transforms and transitions */
 .btn-primary {
-  @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl;
 }
 
 .btn-secondary {
-  @apply bg-white text-gray-800 font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+  @apply bg-white text-gray-800 font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl;
 }
 
-/* Card styles */
+/* Card styles - removed conflicting transitions */
 .card {
-  @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-200 hover:shadow-xl;
+  @apply bg-white rounded-xl shadow-lg p-6 hover:shadow-xl;
 }
 
 /* Animation utilities */

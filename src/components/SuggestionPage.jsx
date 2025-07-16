@@ -15,9 +15,17 @@ import { useAppContext } from '../context/AppContext';
 import AccessibleButton from './AccessibleButton';
 import LoadingSpinner from './LoadingSpinner';
 import SkipNavigation from './SkipNavigation';
+import {
+  useAnimationConfig,
+  pageVariants,
+  pageTransition,
+  cardVariants,
+  fadeVariants
+} from '../utils/animations';
 
 const SuggestionPage = () => {
   const navigate = useNavigate();
+  const { shouldReduceMotion } = useAnimationConfig();
   const {
     currentActivity,
     isLoading,
@@ -58,38 +66,7 @@ const SuggestionPage = () => {
 
   const progress = getSessionProgress();
 
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.8,
-      rotateY: -90
-    },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      rotateY: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      scale: 0.8,
-      rotateY: 90,
-      transition: {
-        duration: 0.4
-      }
-    }
-  };
-
-  const buttonVariants = {
-    hover: { 
-      scale: 1.05,
-      transition: { type: "spring", stiffness: 400 }
-    },
-    tap: { scale: 0.95 }
-  };
+  // Remove the local variants since we're using the shared ones
 
   if (!hasActivitiesRemaining() && !currentActivity) {
     return (
@@ -139,7 +116,16 @@ const SuggestionPage = () => {
   return (
     <>
       <SkipNavigation />
-      <div className="min-h-screen bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 p-4" role="main" id="main-content">
+      <motion.div
+        className="min-h-screen bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 p-4"
+        role="main"
+        id="main-content"
+        variants={pageVariants}
+        initial="initial"
+        animate="in"
+        exit="out"
+        transition={pageTransition(shouldReduceMotion)}
+      >
         {/* Header */}
         <header className="max-w-4xl mx-auto pt-6 pb-4">
           <nav className="flex justify-between items-center text-white" role="navigation" aria-label="Main navigation">
@@ -179,9 +165,10 @@ const SuggestionPage = () => {
               <motion.div
                 key="loading"
                 className="py-20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                variants={fadeVariants(shouldReduceMotion)}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
               >
                 <LoadingSpinner
                   message="Finding your next inspiration..."
@@ -192,7 +179,7 @@ const SuggestionPage = () => {
               <motion.article
                 key={currentActivity.id}
                 className="bg-white rounded-2xl shadow-2xl overflow-hidden"
-                variants={cardVariants}
+                variants={cardVariants(shouldReduceMotion)}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
@@ -296,7 +283,7 @@ const SuggestionPage = () => {
             </motion.aside>
           )}
         </main>
-      </div>
+      </motion.div>
     </>
   );
 };

@@ -17,10 +17,18 @@ import { getActivityById } from '../data/activities';
 import { useAppContext } from '../context/AppContext';
 import AccessibleButton from './AccessibleButton';
 import SkipNavigation from './SkipNavigation';
+import {
+  useAnimationConfig,
+  pageVariants,
+  pageTransition,
+  containerVariants,
+  itemVariants
+} from '../utils/animations';
 
 const TutorialPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { shouldReduceMotion } = useAnimationConfig();
   const { getNewSuggestion } = useAppContext();
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [showMaterials, setShowMaterials] = useState(true);
@@ -74,25 +82,7 @@ const TutorialPage = () => {
 
   const progressPercentage = (completedSteps.size / activity.steps.length) * 100;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 }
-    }
-  };
+  // Using shared animation variants
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
@@ -106,7 +96,14 @@ const TutorialPage = () => {
   return (
     <>
       <SkipNavigation />
-      <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
+      <motion.div
+        className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500"
+        variants={pageVariants}
+        initial="initial"
+        animate="in"
+        exit="out"
+        transition={pageTransition(shouldReduceMotion)}
+      >
         {/* Header */}
         <header className="bg-white/10 backdrop-blur-sm border-b border-white/20">
           <div className="max-w-4xl mx-auto px-4 py-4">
@@ -149,14 +146,14 @@ const TutorialPage = () => {
         {/* Main Content */}
         <main className="max-w-4xl mx-auto p-4 py-8" id="main-content" role="main">
           <motion.div
-            variants={containerVariants}
+            variants={containerVariants(shouldReduceMotion)}
             initial="hidden"
             animate="visible"
           >
             {/* Activity Header */}
             <motion.header
               className="bg-white rounded-2xl shadow-2xl p-8 mb-6"
-              variants={itemVariants}
+              variants={itemVariants(shouldReduceMotion)}
             >
               <div className="flex flex-wrap items-center gap-3 mb-4" role="group" aria-label="Activity details">
                 <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium" role="text">
@@ -200,7 +197,7 @@ const TutorialPage = () => {
                     className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercentage}%` }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: shouldReduceMotion ? 0.1 : 0.5 }}
                   />
                 </div>
               </div>
@@ -208,8 +205,9 @@ const TutorialPage = () => {
               {progressPercentage === 100 && (
                 <motion.div
                   className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: shouldReduceMotion ? 0.1 : 0.3 }}
                   role="alert"
                   aria-live="polite"
                 >
@@ -226,7 +224,7 @@ const TutorialPage = () => {
               {/* Materials Section */}
               <motion.aside
                 className="lg:col-span-1"
-                variants={itemVariants}
+                variants={itemVariants(shouldReduceMotion)}
                 role="complementary"
                 aria-labelledby="materials-heading"
               >
@@ -244,8 +242,8 @@ const TutorialPage = () => {
                       Materials Needed
                     </h2>
                     <motion.div
-                      animate={{ rotate: showMaterials ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
+                      animate={{ rotate: shouldReduceMotion ? 0 : (showMaterials ? 180 : 0) }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
                       aria-hidden="true"
                     >
                       <ArrowLeft className="w-5 h-5 transform rotate-90" />
@@ -283,7 +281,7 @@ const TutorialPage = () => {
               {/* Steps Section */}
               <motion.section
                 className="lg:col-span-2"
-                variants={itemVariants}
+                variants={itemVariants(shouldReduceMotion)}
                 role="main"
                 aria-labelledby="steps-heading"
               >
@@ -345,7 +343,7 @@ const TutorialPage = () => {
             </div>
           </motion.div>
         </main>
-      </div>
+      </motion.div>
     </>
   );
 };
