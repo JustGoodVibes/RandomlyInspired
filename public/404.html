@@ -9,17 +9,29 @@
       // GitHub Pages SPA redirect solution
       // This script captures the current path and redirects to index.html
       // while preserving the route information for client-side routing
-      
+
       // Store the current path, search params, and hash
-      const redirect = location.pathname.slice(0, -1) + location.search + location.hash;
-      
-      // Only store if it's not the root path
-      if (redirect !== '/RandomlyInspired') {
-        sessionStorage.setItem('ghpages-redirect', redirect);
+      // Only redirect if this is a route request, not an asset request
+      const pathname = location.pathname;
+      const isAssetRequest = pathname.includes('/assets/') ||
+                            pathname.endsWith('.js') ||
+                            pathname.endsWith('.css') ||
+                            pathname.endsWith('.svg') ||
+                            pathname.endsWith('.png') ||
+                            pathname.endsWith('.jpg') ||
+                            pathname.endsWith('.ico');
+
+      if (!isAssetRequest) {
+        const redirect = pathname + location.search + location.hash;
+
+        // Only store if it's not the root path
+        if (redirect !== '/RandomlyInspired/' && redirect !== '/RandomlyInspired') {
+          sessionStorage.setItem('ghpages-redirect', redirect);
+        }
+
+        // Redirect to the main application
+        location.replace('/RandomlyInspired/');
       }
-      
-      // Redirect to the main application
-      location.replace('/RandomlyInspired/');
     </script>
   </head>
   <body>

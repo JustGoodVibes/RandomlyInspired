@@ -9,7 +9,7 @@ import './App.css';
 function App() {
   return (
     <AppProvider>
-      <Router>
+      <Router basename="/RandomlyInspired">
         <div className="App">
           <Routes>
             <Route path="/" element={<LandingPage />} />
