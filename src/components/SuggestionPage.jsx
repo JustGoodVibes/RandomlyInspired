@@ -73,16 +73,16 @@ const SuggestionPage = () => {
         <SkipNavigation />
         <div className="min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 flex items-center justify-center p-4" role="main" id="main-content">
           <motion.div
-            className="max-w-md mx-auto text-center text-white bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            className="max-w-md mx-auto text-center text-white bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             role="dialog"
             aria-labelledby="completion-title"
             aria-describedby="completion-description"
           >
-            <Sparkles className="w-16 h-16 mx-auto mb-4 text-yellow-300" aria-hidden="true" />
-            <h2 id="completion-title" className="text-3xl font-bold mb-4">Congratulations!</h2>
-            <p id="completion-description" className="text-lg mb-6">
+            <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-yellow-300" aria-hidden="true" />
+            <h2 id="completion-title" className="text-2xl sm:text-3xl font-bold mb-4">Congratulations!</h2>
+            <p id="completion-description" className="text-base sm:text-lg mb-6 leading-relaxed">
               You've seen all {progress.totalActivities} activities!
               Ready to start fresh?
             </p>
@@ -121,21 +121,21 @@ const SuggestionPage = () => {
         id="main-content"
       >
         {/* Header */}
-        <header className="max-w-4xl mx-auto pt-6 pb-4">
+        <header className="max-w-4xl mx-auto pt-4 sm:pt-6 pb-4 px-4">
           <nav className="flex justify-between items-center text-white" role="navigation" aria-label="Main navigation">
             <AccessibleButton
               onClick={handleHome}
-              className="flex items-center gap-2 px-4 py-2"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-sm sm:text-base"
               variant="ghost"
               ariaLabel="Return to home page"
             >
-              <Home className="w-5 h-5" aria-hidden="true" />
-              Home
+              <Home className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+              <span className="hidden xs:inline">Home</span>
             </AccessibleButton>
 
             <div className="text-center" role="status" aria-live="polite">
-              <div className="text-sm opacity-80">Progress</div>
-              <div className="font-semibold" aria-label={`${progress.shownCount} of ${progress.totalActivities} activities shown`}>
+              <div className="text-xs sm:text-sm opacity-80">Progress</div>
+              <div className="font-semibold text-sm sm:text-base" aria-label={`${progress.shownCount} of ${progress.totalActivities} activities shown`}>
                 {progress.shownCount} / {progress.totalActivities}
               </div>
             </div>
@@ -153,12 +153,12 @@ const SuggestionPage = () => {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-2xl mx-auto">
+        <main className="max-w-2xl mx-auto px-4">
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
                 key="loading"
-                className="py-20"
+                className="py-12 sm:py-20"
                 variants={fadeVariants(shouldReduceMotion)}
                 initial="hidden"
                 animate="visible"
@@ -182,22 +182,22 @@ const SuggestionPage = () => {
                 aria-describedby="activity-description"
               >
                 {/* Activity Card */}
-                <div className="p-8">
-                  <div className="flex items-center gap-3 mb-4" role="group" aria-label="Activity details">
-                    <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium" role="text">
+                <div className="p-6 sm:p-8">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4" role="group" aria-label="Activity details">
+                    <span className="bg-purple-100 text-purple-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium" role="text">
                       {currentActivity.category}
                     </span>
-                    <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1" role="text">
-                      <Target className="w-4 h-4" aria-hidden="true" />
+                    <span className="bg-gray-100 text-gray-700 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1" role="text">
+                      <Target className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
                       {currentActivity.difficulty}
                     </span>
                   </div>
 
-                  <h2 id="activity-title" className="text-3xl font-bold text-gray-800 mb-4">
+                  <h2 id="activity-title" className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 leading-tight">
                     {currentActivity.title}
                   </h2>
 
-                  <p id="activity-description" className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  <p id="activity-description" className="text-gray-600 text-base sm:text-lg mb-6 leading-relaxed">
                     {currentActivity.description}
                   </p>
 
@@ -217,25 +217,25 @@ const SuggestionPage = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-4" role="group" aria-label="Activity response options">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4" role="group" aria-label="Activity response options">
                     <AccessibleButton
                       onClick={handleAccept}
-                      className="flex-1 px-6 py-4 text-lg flex items-center justify-center gap-3 shadow-lg"
+                      className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 shadow-lg"
                       variant="success"
                       ariaLabel={`Accept ${currentActivity.title} and view tutorial`}
                     >
-                      <ThumbsUp className="w-6 h-6" aria-hidden="true" />
-                      Yes, let's do it!
+                      <ThumbsUp className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+                      <span className="whitespace-nowrap">Yes, let's do it!</span>
                     </AccessibleButton>
 
                     <AccessibleButton
                       onClick={handleReject}
-                      className="flex-1 px-6 py-4 text-lg flex items-center justify-center gap-3 shadow-lg"
+                      className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 shadow-lg"
                       variant="danger"
                       ariaLabel={`Reject ${currentActivity.title} and show another activity`}
                     >
-                      <ThumbsDown className="w-6 h-6" aria-hidden="true" />
-                      Show me something else
+                      <ThumbsDown className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+                      <span className="text-center leading-tight">Show me something else</span>
                     </AccessibleButton>
                   </div>
                 </div>
@@ -246,7 +246,7 @@ const SuggestionPage = () => {
           {/* Session Stats */}
           {sessionStats.totalShown > 0 && (
             <motion.aside
-              className="mt-8 bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white text-center"
+              className="mt-6 sm:mt-8 bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white text-center mx-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -254,24 +254,24 @@ const SuggestionPage = () => {
               aria-labelledby="session-stats-title"
             >
               <h3 id="session-stats-title" className="sr-only">Session Statistics</h3>
-              <div className="grid grid-cols-3 gap-4 text-sm" role="group" aria-label="Session statistics">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm" role="group" aria-label="Session statistics">
                 <div>
-                  <div className="font-semibold text-lg" aria-label={`${sessionStats.totalShown} activities shown`}>
+                  <div className="font-semibold text-base sm:text-lg" aria-label={`${sessionStats.totalShown} activities shown`}>
                     {sessionStats.totalShown}
                   </div>
-                  <div className="opacity-80">Shown</div>
+                  <div className="opacity-80 text-xs sm:text-sm">Shown</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-lg text-green-300" aria-label={`${sessionStats.acceptedCount} activities accepted`}>
+                  <div className="font-semibold text-base sm:text-lg text-green-300" aria-label={`${sessionStats.acceptedCount} activities accepted`}>
                     {sessionStats.acceptedCount}
                   </div>
-                  <div className="opacity-80">Accepted</div>
+                  <div className="opacity-80 text-xs sm:text-sm">Accepted</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-lg text-red-300" aria-label={`${sessionStats.rejectedCount} activities rejected`}>
+                  <div className="font-semibold text-base sm:text-lg text-red-300" aria-label={`${sessionStats.rejectedCount} activities rejected`}>
                     {sessionStats.rejectedCount}
                   </div>
-                  <div className="opacity-80">Rejected</div>
+                  <div className="opacity-80 text-xs sm:text-sm">Rejected</div>
                 </div>
               </div>
             </motion.aside>

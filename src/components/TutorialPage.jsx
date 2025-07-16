@@ -39,9 +39,9 @@ const TutorialPage = () => {
       <>
         <SkipNavigation />
         <div className="min-h-screen bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center p-4" role="main" id="main-content">
-          <div className="text-center text-white" role="alert" aria-live="assertive">
-            <h1 className="text-2xl font-bold mb-4">Activity Not Found</h1>
-            <p className="mb-4">The requested activity could not be found.</p>
+          <div className="text-center text-white max-w-md mx-auto" role="alert" aria-live="assertive">
+            <h1 className="text-xl sm:text-2xl font-bold mb-4">Activity Not Found</h1>
+            <p className="mb-4 text-sm sm:text-base leading-relaxed">The requested activity could not be found.</p>
             <AccessibleButton
               onClick={() => navigate('/')}
               className="px-6 py-3"
@@ -100,16 +100,17 @@ const TutorialPage = () => {
       >
         {/* Header */}
         <header className="bg-white/10 backdrop-blur-sm border-b border-white/20">
-          <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4">
             <nav className="flex items-center justify-between text-white" role="navigation" aria-label="Tutorial navigation">
               <AccessibleButton
                 onClick={handleBackToSuggestions}
-                className="flex items-center gap-2 px-4 py-2"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-sm sm:text-base"
                 variant="ghost"
                 ariaLabel="Go back to activity suggestions"
               >
-                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-                Back to Suggestions
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+                <span className="hidden xs:inline">Back to Suggestions</span>
+                <span className="xs:hidden">Back</span>
               </AccessibleButton>
 
               <div className="flex gap-2" role="group" aria-label="Navigation options">
@@ -138,7 +139,7 @@ const TutorialPage = () => {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-4xl mx-auto p-4 py-8" id="main-content" role="main">
+        <main className="max-w-6xl mx-auto p-4 sm:p-6 py-6 sm:py-8" id="main-content" role="main">
           <motion.div
             variants={containerVariants(shouldReduceMotion)}
             initial="hidden"
@@ -146,28 +147,28 @@ const TutorialPage = () => {
           >
             {/* Activity Header */}
             <motion.header
-              className="bg-white rounded-2xl shadow-2xl p-8 mb-6"
+              className="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6"
               variants={itemVariants(shouldReduceMotion)}
             >
-              <div className="flex flex-wrap items-center gap-3 mb-4" role="group" aria-label="Activity details">
-                <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium" role="text">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4" role="group" aria-label="Activity details">
+                <span className="bg-purple-100 text-purple-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium" role="text">
                   {activity.category}
                 </span>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(activity.difficulty)}`} role="text">
-                  <Target className="w-4 h-4 inline mr-1" aria-hidden="true" />
+                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(activity.difficulty)}`} role="text">
+                  <Target className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" aria-hidden="true" />
                   {activity.difficulty}
                 </span>
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium" role="text">
-                  <Clock className="w-4 h-4 inline mr-1" aria-hidden="true" />
+                <span className="bg-blue-100 text-blue-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium" role="text">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" aria-hidden="true" />
                   {activity.estimatedTime}
                 </span>
               </div>
 
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 leading-tight">
                 {activity.title}
               </h1>
 
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
                 {activity.description}
               </p>
 
@@ -214,7 +215,7 @@ const TutorialPage = () => {
               )}
             </motion.header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Materials Section */}
               <motion.aside
                 className="lg:col-span-1"
@@ -222,7 +223,7 @@ const TutorialPage = () => {
                 role="complementary"
                 aria-labelledby="materials-heading"
               >
-                <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-4">
+                <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 sticky top-4">
                   <AccessibleButton
                     onClick={() => setShowMaterials(!showMaterials)}
                     className="flex items-center justify-between w-full mb-4 p-0 bg-transparent text-gray-800 hover:bg-transparent"
@@ -231,9 +232,9 @@ const TutorialPage = () => {
                     aria-expanded={showMaterials}
                     aria-controls="materials-list"
                   >
-                    <h2 id="materials-heading" className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                      <Package className="w-6 h-6" aria-hidden="true" />
-                      Materials Needed
+                    <h2 id="materials-heading" className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                      <Package className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+                      <span className="leading-tight">Materials Needed</span>
                     </h2>
                     <motion.div
                       animate={{ rotate: shouldReduceMotion ? 0 : (showMaterials ? 180 : 0) }}
@@ -279,10 +280,10 @@ const TutorialPage = () => {
                 role="main"
                 aria-labelledby="steps-heading"
               >
-                <div className="bg-white rounded-2xl shadow-xl p-6">
-                  <h2 id="steps-heading" className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                    <BookOpen className="w-6 h-6" aria-hidden="true" />
-                    Step-by-Step Instructions
+                <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
+                  <h2 id="steps-heading" className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+                    <span className="leading-tight">Step-by-Step Instructions</span>
                   </h2>
 
                   <div className="space-y-4" role="list" aria-label="Tutorial steps">
