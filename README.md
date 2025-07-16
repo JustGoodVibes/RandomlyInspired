@@ -4,7 +4,9 @@
 
 RandomlyInspired is a beautiful, fully-accessible web application that randomly suggests new activities and hobbies for users to try, complete with detailed step-by-step tutorials.
 
-![RandomlyInspired Demo](https://img.shields.io/badge/Status-Live-brightgreen) ![React](https://img.shields.io/badge/React-18-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC) ![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.1-green)
+🌐 **[Live Demo](https://justgoodvibes.github.io/RandomlyInspired/)** | 📱 **[Mobile Friendly](https://justgoodvibes.github.io/RandomlyInspired/)** | ♿ **[Accessibility Compliant](https://justgoodvibes.github.io/RandomlyInspired/)**
+
+![RandomlyInspired Demo](https://img.shields.io/badge/Status-Live-brightgreen) ![React](https://img.shields.io/badge/React-18-blue) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC) ![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.1-green) ![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-blue)
 
 ## ✨ Features
 
@@ -63,6 +65,17 @@ RandomlyInspired is a beautiful, fully-accessible web application that randomly 
 
 4. **Open your browser**
    Navigate to `http://localhost:5173`
+
+### Live Demo
+
+🌐 **[Try RandomlyInspired Live](https://justgoodvibes.github.io/RandomlyInspired/)**
+
+The application is deployed on GitHub Pages and fully functional with all features including:
+- ✅ Random activity suggestions
+- ✅ Interactive tutorials
+- ✅ Session tracking
+- ✅ Full accessibility support
+- ✅ Responsive design
 
 ### Build for Production
 
@@ -144,6 +157,18 @@ This project is licensed under the MIT License.
 - Icons provided by Lucide React
 - Animations powered by Framer Motion
 
+## 🚀 Deployment
+
+The application is automatically deployed to GitHub Pages using GitHub Actions. Every push to the main branch triggers a new deployment.
+
+**Live Application**: [https://justgoodvibes.github.io/RandomlyInspired/](https://justgoodvibes.github.io/RandomlyInspired/)
+
+### Deployment Process
+1. Code is pushed to the main branch
+2. GitHub Actions workflow builds the application
+3. Built files are deployed to GitHub Pages
+4. Application is live and accessible worldwide
+
 ---
 
-**Ready to get inspired? [Try RandomlyInspired now!](http://localhost:5173)** 🚀
+**Ready to get inspired? [Try RandomlyInspired now!](https://justgoodvibes.github.io/RandomlyInspired/)** 🚀
