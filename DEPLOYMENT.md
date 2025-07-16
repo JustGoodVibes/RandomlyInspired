@@ -4,9 +4,10 @@ This guide explains how to deploy the RandomlyInspired application to GitHub Pag
 
 ## 📋 Prerequisites
 
-1. **GitHub Repository**: Create the repository on GitHub
-2. **GitHub Pages Enabled**: Enable GitHub Pages in repository settings
-3. **Permissions**: Ensure GitHub Actions has write permissions
+1. **Node.js 22+**: Ensure you have Node.js 22 or later installed
+2. **GitHub Repository**: Create the repository on GitHub
+3. **GitHub Pages Enabled**: Enable GitHub Pages in repository settings
+4. **Permissions**: Ensure GitHub Actions has write permissions
 
 ## 🔧 Configuration Complete
 
@@ -19,7 +20,7 @@ The following deployment configuration has been set up:
 
 ### ✅ GitHub Actions Workflow (`.github/workflows/deploy.yml`)
 - Automatic deployment on push to main branch
-- Node.js 18 environment
+- Node.js 22 environment (latest LTS)
 - Build and deploy to GitHub Pages
 - Proper permissions and concurrency handling
 

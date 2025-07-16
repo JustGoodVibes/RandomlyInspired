@@ -42,8 +42,8 @@ RandomlyInspired is a beautiful, fully-accessible web application that randomly 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm or yarn
+- Node.js 22+ (LTS recommended)
+- npm 10+ or yarn
 
 ### Installation
 
@@ -86,13 +86,15 @@ npm run preview
 
 ## 🛠 Tech Stack
 
-- **Frontend Framework**: React 18 with Vite
+- **Runtime**: Node.js 22+ (LTS)
+- **Frontend Framework**: React 19 with Vite 7
 - **Styling**: Tailwind CSS 3.4
-- **Animations**: Framer Motion
-- **Routing**: React Router DOM
+- **Animations**: Framer Motion 12
+- **Routing**: React Router DOM 7
 - **Icons**: Lucide React
 - **State Management**: React Context API
 - **Data Persistence**: Local Storage
+- **Build Tool**: Vite with optimized code splitting
 
 ## 📱 User Journey
 
