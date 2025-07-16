@@ -4,6 +4,8 @@
   /* Prevent layout shifts during page transitions */
   position: relative;
   overflow-x: hidden;
+  /* Ensure immediate rendering */
+  background-color: transparent;
 }
 
 /* Prevent flash of unstyled content */
@@ -12,24 +14,32 @@
   position: relative;
 }
 
-/* Page transition optimization */
+/* Ensure gradient backgrounds render immediately */
+.bg-gradient-to-br {
+  background-attachment: local;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* Page transition optimization - fixed positioning issues */
 [data-page-wrapper] {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   width: 100%;
   min-height: 100vh;
   will-change: opacity, transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  /* Ensure background renders immediately */
+  background-color: transparent;
+  isolation: isolate;
 }
 
 /* Prevent content jumping during animations */
 .page-content {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  /* Ensure smooth rendering */
+  contain: layout style paint;
 }
 
 /* Respect user's reduced motion preference */

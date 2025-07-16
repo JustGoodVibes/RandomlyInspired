@@ -17,60 +17,57 @@ export const useAnimationConfig = () => {
   };
 };
 
-// Page transition animations - optimized to prevent flickering
+// Page transition animations - ultra-smooth, no flickering
 export const pageVariants = {
   initial: {
     opacity: 0,
-    scale: 0.98,
   },
   in: {
     opacity: 1,
-    scale: 1,
   },
   out: {
     opacity: 0,
-    scale: 1.02,
   },
 };
 
 export const pageTransition = (shouldReduceMotion = false) => ({
   type: "tween",
-  ease: [0.25, 0.46, 0.45, 0.94], // Custom easing for smoother transitions
-  duration: shouldReduceMotion ? 0.15 : 0.4,
+  ease: "easeInOut",
+  duration: shouldReduceMotion ? 0.1 : 0.3,
 });
 
-// Container animations with stagger - optimized for page transitions
+// Container animations with stagger - ultra-smooth, no conflicts
 export const containerVariants = (shouldReduceMotion = false) => ({
   hidden: {
-    opacity: 0,
+    opacity: 1, // Start visible to prevent flash
   },
   visible: {
     opacity: 1,
     transition: {
-      duration: shouldReduceMotion ? 0.1 : 0.3,
-      staggerChildren: shouldReduceMotion ? 0.02 : 0.05,
-      delayChildren: shouldReduceMotion ? 0 : 0.2, // Delay to let page transition complete
+      duration: shouldReduceMotion ? 0.1 : 0.2,
+      staggerChildren: shouldReduceMotion ? 0.01 : 0.03,
+      delayChildren: shouldReduceMotion ? 0 : 0.1,
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: shouldReduceMotion ? 0.05 : 0.15,
+      duration: shouldReduceMotion ? 0.05 : 0.1,
     },
   },
 });
 
-// Item animations for staggered children
+// Item animations for staggered children - minimal movement
 export const itemVariants = (shouldReduceMotion = false) => ({
-  hidden: { 
-    opacity: 0, 
-    y: shouldReduceMotion ? 0 : 20,
+  hidden: {
+    opacity: 0.8, // Start nearly visible
+    y: shouldReduceMotion ? 0 : 5, // Minimal movement
   },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { 
-      duration: shouldReduceMotion ? 0.2 : 0.5,
+    transition: {
+      duration: shouldReduceMotion ? 0.1 : 0.3,
       ease: "easeOut",
     },
   },
