@@ -9,6 +9,24 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- GitHub Pages SPA redirect handler -->
+    <script>
+      // Handle GitHub Pages SPA redirect
+      // This script runs before React loads to restore the correct route
+      (function() {
+        var redirect = sessionStorage.getItem('ghpages-redirect');
+        if (redirect) {
+          // Remove the stored redirect to prevent loops
+          sessionStorage.removeItem('ghpages-redirect');
+
+          // Replace the current history state with the intended route
+          // This ensures the back button works correctly
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

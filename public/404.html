@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RandomlyInspired - Redirecting...</title>
+    <meta name="description" content="Redirecting to RandomlyInspired application..." />
+    <script>
+      // GitHub Pages SPA redirect solution
+      // This script captures the current path and redirects to index.html
+      // while preserving the route information for client-side routing
+      
+      // Store the current path, search params, and hash
+      const redirect = location.pathname.slice(0, -1) + location.search + location.hash;
+      
+      // Only store if it's not the root path
+      if (redirect !== '/RandomlyInspired') {
+        sessionStorage.setItem('ghpages-redirect', redirect);
+      }
+      
+      // Redirect to the main application
+      location.replace('/RandomlyInspired/');
+    </script>
+  </head>
+  <body>
+    <!-- Fallback content for users with JavaScript disabled -->
+    <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+      <h1>Redirecting...</h1>
+      <p>If you are not redirected automatically, <a href="/RandomlyInspired/">click here</a>.</p>
+    </div>
+  </body>
+</html>
