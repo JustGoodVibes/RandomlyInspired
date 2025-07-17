@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useCallback } from 'react';
+import confetti from 'canvas-confetti';
 import { useAnimationConfig } from '../utils/animations';
 
 /**
  * ConfettiAnimation component creates a celebratory confetti effect
- * with colorful particles that fall from the top of the screen
+ * using canvas-confetti library for realistic particle physics
  */
-const ConfettiAnimation = ({ 
-  isActive = false, 
+const ConfettiAnimation = ({
+  isActive = false,
   onComplete = () => {},
   duration = 3000,
-  particleCount = 50 
+  particleCount = 50
 }) => {
   const { shouldReduceMotion } = useAnimationConfig();
-  const [particles, setParticles] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const timeoutRef = useRef(null);
 
   // Theme-compliant confetti colors (purple/pink gradient theme)
   const confettiColors = [
@@ -32,139 +31,107 @@ const ConfettiAnimation = ({
     '#10B981', // Emerald-500 (richer green)
   ];
 
-  // Generate random confetti particles
-  const generateParticles = () => {
-    const newParticles = [];
-    const count = shouldReduceMotion ? Math.min(particleCount / 3, 15) : particleCount;
-    
-    for (let i = 0; i < count; i++) {
-      newParticles.push({
-        id: i,
-        x: Math.random() * 100, // Percentage across screen width
-        y: -10, // Start above screen
-        rotation: Math.random() * 360,
-        color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
-        size: Math.random() * 8 + 4, // 4-12px
-        shape: Math.random() > 0.7 ? 'star' : (Math.random() > 0.5 ? 'circle' : 'square'),
-        delay: Math.random() * 0.8, // Stagger particle start times
-        drift: (Math.random() - 0.5) * 40, // Horizontal drift
-      });
-    }
-    return newParticles;
-  };
+  // Fire realistic confetti with multiple patterns for natural look
+  const fireRealisticConfetti = useCallback(() => {
+    const totalCount = shouldReduceMotion ? Math.min(particleCount / 3, 15) : particleCount;
+
+    // Pattern 1: 25% of particles with spread: 90, startVelocity: 55
+    confetti({
+      particleCount: Math.floor(totalCount * 0.25),
+      spread: 90,
+      startVelocity: 55,
+      colors: confettiColors,
+      disableForReducedMotion: shouldReduceMotion
+    });
+
+    // Pattern 2: 20% of particles with spread: 60
+    confetti({
+      particleCount: Math.floor(totalCount * 0.20),
+      spread: 60,
+      colors: confettiColors,
+      disableForReducedMotion: shouldReduceMotion
+    });
+
+    // Pattern 3: 35% of particles with spread: 100, decay: 0.91, scalar: 0.8
+    confetti({
+      particleCount: Math.floor(totalCount * 0.35),
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+      colors: confettiColors,
+      disableForReducedMotion: shouldReduceMotion
+    });
+
+    // Pattern 4: 10% of particles with spread: 180, startVelocity: 25, decay: 0.92, scalar: 1.2
+    confetti({
+      particleCount: Math.floor(totalCount * 0.10),
+      spread: 180,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+      colors: confettiColors,
+      disableForReducedMotion: shouldReduceMotion
+    });
+
+    // Pattern 5: 10% of particles with spread: 140, startVelocity: 45
+    confetti({
+      particleCount: Math.floor(totalCount * 0.10),
+      spread: 140,
+      startVelocity: 45,
+      colors: confettiColors,
+      disableForReducedMotion: shouldReduceMotion
+    });
+  }, [shouldReduceMotion, particleCount, confettiColors]);
 
   // Trigger confetti animation
   useEffect(() => {
-    if (isActive && !shouldReduceMotion) {
-      setParticles(generateParticles());
-      setIsVisible(true);
-      
-      // Auto-hide after duration
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        onComplete();
-      }, duration);
+    if (isActive) {
+      if (shouldReduceMotion) {
+        // For reduced motion, fire a minimal confetti burst
+        confetti({
+          particleCount: Math.min(particleCount / 4, 10),
+          spread: 45,
+          colors: confettiColors,
+          disableForReducedMotion: false // We handle it manually
+        });
 
-      return () => clearTimeout(timer);
-    } else if (isActive && shouldReduceMotion) {
-      // For reduced motion, just show a brief flash
-      setIsVisible(true);
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        onComplete();
-      }, 500);
-      return () => clearTimeout(timer);
+        // Complete quickly for reduced motion
+        timeoutRef.current = setTimeout(() => {
+          onComplete();
+        }, 500);
+      } else {
+        // Fire the realistic confetti pattern
+        fireRealisticConfetti();
+
+        // Complete after the specified duration
+        timeoutRef.current = setTimeout(() => {
+          onComplete();
+        }, duration);
+      }
     }
-  }, [isActive, shouldReduceMotion, duration, onComplete]);
 
-  // Particle animation variants
-  const particleVariants = {
-    initial: (particle) => ({
-      x: `${particle.x}vw`,
-      y: '-10vh',
-      rotate: particle.rotation,
-      opacity: 0,
-      scale: 0,
-    }),
-    animate: (particle) => ({
-      x: `${particle.x + particle.drift}vw`,
-      y: '110vh',
-      rotate: particle.rotation + 360,
-      opacity: [0, 1, 1, 0],
-      scale: [0, 1, 1, 0],
-      transition: {
-        duration: shouldReduceMotion ? 0.5 : 2.5,
-        delay: particle.delay,
-        ease: 'easeOut',
-        opacity: {
-          times: [0, 0.1, 0.8, 1],
-          duration: shouldReduceMotion ? 0.5 : 2.5,
-        },
-        scale: {
-          times: [0, 0.1, 0.8, 1],
-          duration: shouldReduceMotion ? 0.5 : 2.5,
-        },
-      },
-    }),
-  };
+    // Cleanup timeout on unmount or when isActive changes
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [isActive, shouldReduceMotion, duration, onComplete, particleCount, fireRealisticConfetti]);
 
-  // Reduced motion fallback - simple flash effect
-  const flashVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: [0, 0.3, 0],
-      transition: { duration: 0.5, times: [0, 0.5, 1] }
-    },
-  };
-
+  // Canvas-confetti handles the animation automatically, so we just need
+  // to provide an accessible container for screen readers
   if (!isActive) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 pointer-events-none z-50"
       role="img"
       aria-label="Celebration confetti animation"
       aria-live="polite"
     >
-      <AnimatePresence>
-        {isVisible && (
-          <>
-            {shouldReduceMotion ? (
-              // Reduced motion: Simple flash effect
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-purple-400/20 via-pink-400/20 to-yellow-400/20"
-                variants={flashVariants}
-                initial="initial"
-                animate="animate"
-                exit="initial"
-              />
-            ) : (
-              // Full confetti animation
-              particles.map((particle) => (
-                <motion.div
-                  key={particle.id}
-                  className="absolute"
-                  custom={particle}
-                  variants={particleVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="initial"
-                  style={{
-                    width: `${particle.size}px`,
-                    height: `${particle.size}px`,
-                    backgroundColor: particle.shape === 'star' ? 'transparent' : particle.color,
-                    borderRadius: particle.shape === 'circle' ? '50%' : '0%',
-                    clipPath: particle.shape === 'star'
-                      ? 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
-                      : 'none',
-                    background: particle.shape === 'star' ? particle.color : 'transparent',
-                  }}
-                />
-              ))
-            )}
-          </>
-        )}
-      </AnimatePresence>
+      {/* Canvas-confetti renders to the default canvas automatically */}
+      {/* This div serves as an accessibility landmark for screen readers */}
     </div>
   );
 };
