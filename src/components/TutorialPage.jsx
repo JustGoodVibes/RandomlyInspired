@@ -18,6 +18,7 @@ import { useAppContext } from '../context/AppContext';
 import AccessibleButton from './AccessibleButton';
 import SkipNavigation from './SkipNavigation';
 import PageWrapper from './PageWrapper';
+import ConfettiAnimation from './ConfettiAnimation';
 import {
   useAnimationConfig,
   containerVariants,
@@ -31,8 +32,46 @@ const TutorialPage = () => {
   const { getNewSuggestion } = useAppContext();
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [showMaterials, setShowMaterials] = useState(true);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false);
 
   const activity = getActivityById(parseInt(id));
+
+  // Check if all steps are completed and trigger confetti
+  const allStepsCompleted = activity && completedSteps.size === activity.steps.length;
+
+  // Trigger confetti when all steps are completed (one-time celebration)
+  useEffect(() => {
+    if (allStepsCompleted && !hasTriggeredConfetti && activity.steps.length > 0) {
+      setShowConfetti(true);
+      setHasTriggeredConfetti(true);
+
+      // Announce completion for screen readers
+      const announcement = `Congratulations! You have completed all ${activity.steps.length} steps for ${activity.title}. Well done!`;
+
+      // Create a temporary element for screen reader announcement
+      const announcer = document.createElement('div');
+      announcer.setAttribute('aria-live', 'assertive');
+      announcer.setAttribute('aria-atomic', 'true');
+      announcer.className = 'sr-only';
+      announcer.textContent = announcement;
+      document.body.appendChild(announcer);
+
+      // Clean up the announcer after a delay
+      setTimeout(() => {
+        if (document.body.contains(announcer)) {
+          document.body.removeChild(announcer);
+        }
+      }, 3000);
+    }
+  }, [allStepsCompleted, hasTriggeredConfetti, activity]);
+
+  // Reset confetti trigger when steps are unchecked
+  useEffect(() => {
+    if (!allStepsCompleted && hasTriggeredConfetti) {
+      setHasTriggeredConfetti(false);
+    }
+  }, [allStepsCompleted, hasTriggeredConfetti]);
 
   if (!activity) {
     return (
@@ -95,6 +134,15 @@ const TutorialPage = () => {
   return (
     <>
       <SkipNavigation />
+
+      {/* Confetti Animation */}
+      <ConfettiAnimation
+        isActive={showConfetti}
+        onComplete={() => setShowConfetti(false)}
+        duration={3000}
+        particleCount={60}
+      />
+
       <PageWrapper
         className="bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500"
       >
@@ -197,20 +245,47 @@ const TutorialPage = () => {
                 </div>
               </div>
 
-              {progressPercentage === 100 && (
+              {allStepsCompleted && (
                 <motion.div
-                  className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3"
+                  className="bg-gradient-to-r from-green-50 to-purple-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 relative overflow-hidden"
                   initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: shouldReduceMotion ? 0.1 : 0.3 }}
                   role="alert"
                   aria-live="polite"
+                  aria-describedby="completion-description"
                 >
-                  <Star className="w-6 h-6 text-green-600" aria-hidden="true" />
+                  <motion.div
+                    animate={shouldReduceMotion ? {} : {
+                      rotate: [0, 360],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatType: "loop"
+                    }}
+                  >
+                    <Star className="w-6 h-6 text-green-600" aria-hidden="true" />
+                  </motion.div>
                   <div>
-                    <h3 className="font-semibold text-green-800">Congratulations!</h3>
-                    <p className="text-green-700 text-sm">You've completed all the steps. Great job!</p>
+                    <h3 className="font-semibold text-green-800 flex items-center gap-2">
+                      Congratulations!
+                      {!shouldReduceMotion && <span className="text-purple-600" aria-hidden="true">🎉</span>}
+                    </h3>
+                    <p id="completion-description" className="text-green-700 text-sm">
+                      You've completed all {activity.steps.length} steps for {activity.title}. Great job!
+                    </p>
                   </div>
+
+                  {/* Subtle background animation for reduced motion users */}
+                  {shouldReduceMotion && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-100/30 to-transparent"
+                      animate={{ x: ['-100%', '100%'] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatType: "loop" }}
+                    />
+                  )}
                 </motion.div>
               )}
             </motion.header>
